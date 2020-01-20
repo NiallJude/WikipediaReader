@@ -34,10 +34,6 @@ public class Pages {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getExtract() {
         return extract;
     }

@@ -5,11 +5,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.SQLOutput;
 
 public class WikipediaAPICaller {
 
@@ -38,7 +36,7 @@ public class WikipediaAPICaller {
 
         // Write response to a file in JSON
         writeResponse(result, fileName);
-
+        // Close Client Resource
         closeResource(httpClient);
     }
 
@@ -46,8 +44,8 @@ public class WikipediaAPICaller {
      * Close the HttpClient resource.
      * It will not be needed again.
      *
+     * @throws IOException - Potential if the httpClient cannot be found (rare).
      * @author - Niall Jude Collins
-     * @exception IOException - Potential if the httpClient cannot be found (rare).
      */
     private void closeResource(CloseableHttpClient httpClient) {
         try {
@@ -63,10 +61,10 @@ public class WikipediaAPICaller {
      * This will be analysed and converted into
      * Project objects.
      *
-     * @author - Niall Jude Collins
-     * @param result - Results of the API Call (to write).
+     * @param result   - Results of the API Call (to write).
      * @param fileName - The name of the file this will create.
-     * @exception  IOException - Read/Writes may fail.
+     * @throws IOException - Read/Writes may fail.
+     * @author - Niall Jude Collins
      */
     private void writeResponse(StringBuffer result, String fileName) {
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
@@ -82,15 +80,15 @@ public class WikipediaAPICaller {
      * Request JSON format.
      * Captures the response and returns it.
      *
-     * @author - Niall Jude Collins
      * @param httpclient - The HTTPClient from Apache that will handle the call.
-     * @param scheme - HTTP or HTTPS?
-     * @param host - The website (en.wikipedia.org)
-     * @param path - /w/api.php? - The sub directories of en.wikipedia.org to query
+     * @param scheme     - HTTP or HTTPS?
+     * @param host       - The website (en.wikipedia.org)
+     * @param path       - /w/api.php? - The sub directories of en.wikipedia.org to query
      * @return result - The StringBuffer output of the response.
-     * @exception URISyntaxException - URI May not have been correctly set up.
-     * @exception IOException - The Read/Write of the data may fail (unlikely).
-     * @exception RuntimeException - Thrown in the result of a non-200 HTTP code.
+     * @throws URISyntaxException - URI May not have been correctly set up.
+     * @throws IOException        - The Read/Write of the data may fail (unlikely).
+     * @throws RuntimeException   - Thrown in the result of a non-200 HTTP code.
+     * @author - Niall Jude Collins
      */
     private StringBuffer getAPIResponse(CloseableHttpClient httpclient, String scheme, String host, String path, String customQuery) {
         // Initialise response and result
@@ -99,7 +97,7 @@ public class WikipediaAPICaller {
 
         try {
             URI uri = getUri(scheme, host, path, customQuery);
-            System.out.println("URL:\n"+uri);
+            System.out.println("URL:\n" + uri);
             HttpGet httpGet = new HttpGet(uri);
             httpGet.addHeader("accept", "application/json");
             response = httpclient.execute(httpGet);
@@ -126,8 +124,8 @@ public class WikipediaAPICaller {
      * Process the response and return.
      * Throws IOException.
      *
-     * @author - Niall Jude Collins
      * @param response - The HTTP Response from the API.
+     * @author - Niall Jude Collins
      */
     private StringBuffer processResponse(HttpResponse response) throws IOException {
 
@@ -145,12 +143,12 @@ public class WikipediaAPICaller {
      * Process the response and return.
      * Throws IOException.
      *
-     * @author - Niall Jude Collins
-     * @param scheme - HTTP or HTTPS?
-     * @param host - The website (en.wikipedia.org)
-     * @param path - /w/api.php? - The sub directories of en.wikipedia.org to query
+     * @param scheme      - HTTP or HTTPS?
+     * @param host        - The website (en.wikipedia.org)
+     * @param path        - /w/api.php? - The sub directories of en.wikipedia.org to query
      * @param customQuery - The query block after the scheme, host & path
      * @return URI - The object with which to query the API.
+     * @author - Niall Jude Collins
      */
     public URI getUri(String scheme, String host, String path, String customQuery) throws URISyntaxException {
         return new URIBuilder()
@@ -164,8 +162,8 @@ public class WikipediaAPICaller {
     /**
      * Simply print a given String.
      *
-     * @author - Niall Jude Collins
      * @param string - String to print.
+     * @author - Niall Jude Collins
      */
     private void printResponse(String string) {
         System.out.println(string);

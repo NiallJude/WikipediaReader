@@ -10,11 +10,7 @@ public class Main {
     public static void main(String[] args) {
         // Starts the application.
         Main main = new Main();
-        try {
         main.start();
-        } catch (IOException ex){
-            ex.printStackTrace();
-        }
     }
 
     /**
@@ -23,18 +19,13 @@ public class Main {
      *
      * @author Niall Jude Collins
      */
-    private void start() throws IOException {
-        // Call GitHub API
+    private void start() {
+        // Call Wikipedia API
         System.out.println("Querying Wikipedia for page contents...\n");
         runWikipediaAPICall();
+
         // Read JSON file
         getPageInformationFromJSON();
-    }
-
-    private void getPageInformationFromJSON() throws IOException {
-        // Read JSON and get 10 projects in a list
-        JSONManager JSONManager = new JSONManager();
-        JSONManager.readJSONFile();
     }
 
     /**
@@ -49,5 +40,11 @@ public class Main {
         // Call Wikipedia API
         WikipediaAPICaller api = new WikipediaAPICaller();
         api.runAPICall();
+    }
+
+    private void getPageInformationFromJSON() {
+        // Read JSON and get 10 projects in a list
+        JSONManager JSONManager = new JSONManager();
+        JSONManager.readJSONFile();
     }
 }

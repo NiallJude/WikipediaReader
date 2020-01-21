@@ -83,7 +83,7 @@ public class JSONManager {
         String previousConcatenatedMatch;
         String stringToAdd;
         String concatenatedMatch;
-        ArrayList<String> finalList = new ArrayList<String>();
+        ArrayList<String> finalList = new ArrayList<>();
 
         for (Object entry : array) {
             String currentEntry = ((Map.Entry<String, Integer>) entry).getKey();
@@ -110,7 +110,7 @@ public class JSONManager {
         }
         System.out.println("Top 8 Words: \n");
         for (String item : finalList){
-            System.out.println(item.toString());
+            System.out.println("- "+item.toString());
         }
     }
 

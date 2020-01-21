@@ -86,6 +86,7 @@ public class JSONManager {
         ArrayList<String> finalList = new ArrayList<String>();
 
         for (Object entry : array) {
+            String currentEntry = ((Map.Entry<String, Integer>) entry).getKey();
             if ( finalList.size() < 8) {
                 if (removalHappened) {
                     runs--;
@@ -94,14 +95,13 @@ public class JSONManager {
                 if (((Map.Entry<String, Integer>) entry).getValue() == previousValue) {
                     previousConcatenatedMatch = finalList.get(runs-1);
                     finalList.remove(runs-1);
-                    String currentEntry = ((Map.Entry<String, Integer>) entry).getKey();
                     concatenatedMatch = previousConcatenatedMatch+", "+currentEntry;
                     finalList.add(concatenatedMatch);
                     runs++;
                     removalHappened = true;
                 } else {
                     valueToAdd = ((Map.Entry<String, Integer>) entry).getValue();
-                    stringToAdd = valueToAdd+" "+((Map.Entry<String, Integer>) entry).getKey();
+                    stringToAdd = valueToAdd+" "+currentEntry;
                     finalList.add(stringToAdd);
                     runs++;
                 }

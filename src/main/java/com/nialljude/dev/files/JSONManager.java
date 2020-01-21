@@ -73,39 +73,45 @@ public class JSONManager {
 
         checkForMatchedFrequency(array);
 
-        System.out.println("\nTop "+wordLength+" Words:\n");
-
-        for (int loop=0; loop<5; loop++){
-            System.out.println("- "+array[loop]);
-        }
-
     }
 
     private void checkForMatchedFrequency(Object[] array) {
         int previousValue = 0;
-        String previousKey = "";
-        Map <String, Integer> finalMap = new HashMap<>();
+        int valueToAdd;
+        int runs=0;
+        Boolean removalHappened = false;
+        String previousConcatenatedMatch;
+        String stringToAdd;
+        String concatenatedMatch;
+        ArrayList<String> finalList = new ArrayList<String>();
 
         for (Object entry : array) {
-
-            if ( finalMap.size() < 15) {
+            if ( finalList.size() < 8) {
+                if (removalHappened) {
+                    runs--;
+                    removalHappened = false;
+                }
                 if (((Map.Entry<String, Integer>) entry).getValue() == previousValue) {
-
-                    String concatenatedMatch = previousKey + ", " + ((Map.Entry<String, Integer>) entry).getKey();
-
-                    System.out.println(concatenatedMatch);
-
-                    finalMap.put(concatenatedMatch, previousValue);
+                    previousConcatenatedMatch = finalList.get(runs-1);
+                    finalList.remove(runs-1);
+                    String currentEntry = ((Map.Entry<String, Integer>) entry).getKey();
+                    concatenatedMatch = previousConcatenatedMatch+", "+currentEntry;
+                    finalList.add(concatenatedMatch);
+                    runs++;
+                    removalHappened = true;
                 } else {
-                    finalMap.put(((Map.Entry<String, Integer>) entry).getKey(), ((Map.Entry<String, Integer>) entry).getValue());
+                    valueToAdd = ((Map.Entry<String, Integer>) entry).getValue();
+                    stringToAdd = valueToAdd+" "+((Map.Entry<String, Integer>) entry).getKey();
+                    finalList.add(stringToAdd);
+                    runs++;
                 }
             }
-
             previousValue = ((Map.Entry<String, Integer>) entry).getValue();
-            previousKey = ((Map.Entry<String, Integer>) entry).getKey();
         }
-
-        System.out.println(finalMap.toString());
+        System.out.println("Top 8 Words: \n");
+        for (String item : finalList){
+            System.out.println(item.toString());
+        }
     }
 
     /**

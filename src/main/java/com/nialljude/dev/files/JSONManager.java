@@ -9,7 +9,7 @@ import lombok.NonNull;
 
 public class JSONManager {
 
-    private final String filepath = "Wikiresponse.json";
+    private final String filepath = "WikiResponse.json";
     private final String pageID = "21721040";
     private final int wordLength = 4;
     private final int wordsToDisplay = 5;

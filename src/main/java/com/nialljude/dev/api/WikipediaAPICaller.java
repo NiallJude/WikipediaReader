@@ -11,6 +11,9 @@ import java.net.URISyntaxException;
 
 public class WikipediaAPICaller {
 
+    private final String fileName = "WikiResponse.json";
+    private final String pageID = "21721040";
+
     /**
      * Call the Wikipedia API - construct the URI in stages.
      * Searches for a page contents by pageID
@@ -27,9 +30,8 @@ public class WikipediaAPICaller {
         String scheme = "https";
         String host = "en.wikipedia.org";
         String path = "/w/api.php";
-        String customQuery = "action=query&prop=extracts&pageids=21721040&explaintext&format=json";
-
-        String fileName = "Wikiresponse.json";
+        String customQuery = "action=query&prop=extracts&pageids=[PLACEHOLDER]&explaintext&format=json";
+        customQuery = customQuery.replace("[PLACEHOLDER]", pageID);
 
         // Get StringBuffer result from API Call
         result = getAPIResponse(httpClient, scheme, host, path, customQuery);
@@ -44,7 +46,6 @@ public class WikipediaAPICaller {
      * Close the HttpClient resource.
      * It will not be needed again.
      *
-     * @throws IOException - Potential if the httpClient cannot be found (rare).
      * @author - Niall Jude Collins
      */
     private void closeResource(CloseableHttpClient httpClient) {
@@ -63,7 +64,6 @@ public class WikipediaAPICaller {
      *
      * @param result   - Results of the API Call (to write).
      * @param fileName - The name of the file this will create.
-     * @throws IOException - Read/Writes may fail.
      * @author - Niall Jude Collins
      */
     private void writeResponse(StringBuffer result, String fileName) {
@@ -122,9 +122,10 @@ public class WikipediaAPICaller {
 
     /**
      * Process the response and return.
-     * Throws IOException.
+     *
      *
      * @param response - The HTTP Response from the API.
+     * @throws IOException
      * @author - Niall Jude Collins
      */
     private StringBuffer processResponse(HttpResponse response) throws IOException {
@@ -141,13 +142,13 @@ public class WikipediaAPICaller {
 
     /**
      * Process the response and return.
-     * Throws IOException.
      *
      * @param scheme      - HTTP or HTTPS?
      * @param host        - The website (en.wikipedia.org)
      * @param path        - /w/api.php? - The sub directories of en.wikipedia.org to query
      * @param customQuery - The query block after the scheme, host & path
      * @return URI - The object with which to query the API.
+     * @throws URISyntaxException
      * @author - Niall Jude Collins
      */
     public URI getUri(String scheme, String host, String path, String customQuery) throws URISyntaxException {

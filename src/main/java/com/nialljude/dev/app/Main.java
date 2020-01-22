@@ -14,9 +14,11 @@ public class Main {
     // A reference to the final map
     // for display of formatted information
     private Map<Integer, String> finalMap;
+    // Logging variables.
     private static Logger logger = Logger.getLogger(Main.class.getName());
     static private FileHandler fileTxt;
     static private SimpleFormatter formatterTxt;
+    private final String loggerPath = "logging.txt";
 
     /**
      * A main method
@@ -25,37 +27,9 @@ public class Main {
     public static void main(String[] args) {
         // Starts the application.
         Main main = new Main();
+        // Set up logger
         logger = main.setup();
         main.start();
-    }
-
-    private Logger setup() {
-        // get the global logger to configure it
-        Logger logger = Logger.getLogger(Main.class.getName());
-
-        // suppress the logging output to the console
-        // output only to Logging.txt
-        Logger rootLogger = Logger.getLogger("");
-        Handler[] handlers = rootLogger.getHandlers();
-        if (handlers[0] instanceof ConsoleHandler) {
-            rootLogger.removeHandler(handlers[0]);
-        }
-
-        // Log at Information level
-        logger.setLevel(Level.INFO);
-
-        try {
-            fileTxt = new FileHandler("Logging.txt");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // create a TXT formatter
-        formatterTxt = new SimpleFormatter();
-        fileTxt.setFormatter(formatterTxt);
-        logger.addHandler(fileTxt);
-        logger.info("Logger set up.");
-        return logger;
     }
 
     /**
@@ -119,5 +93,38 @@ public class Main {
             logger.info("Displaying the following key to the user: "+finalMap.get(key));
             System.out.println("- " + key + " " + finalMap.get(key));
         }
+    }
+
+    /**
+     *
+     * @return The Logger
+     */
+    private Logger setup() {
+        // get the global logger to configure it
+        Logger logger = Logger.getLogger(Main.class.getName());
+
+        // suppress the logging output to the console
+        // output only to Logging.txt
+        Logger rootLogger = Logger.getLogger("");
+        Handler[] handlers = rootLogger.getHandlers();
+        if (handlers[0] instanceof ConsoleHandler) {
+            rootLogger.removeHandler(handlers[0]);
+        }
+
+        // Log at Information level
+        logger.setLevel(Level.INFO);
+
+        try {
+            fileTxt = new FileHandler(loggerPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // create a TXT formatter
+        formatterTxt = new SimpleFormatter();
+        fileTxt.setFormatter(formatterTxt);
+        logger.addHandler(fileTxt);
+        logger.info("Logger set up at "+loggerPath);
+        return logger;
     }
 }

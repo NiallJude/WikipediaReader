@@ -3,6 +3,9 @@ package com.nialljude.dev.files;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
 import java.util.*;
+import java.util.logging.Logger;
+
+import com.nialljude.dev.app.Main;
 import com.nialljude.dev.wikipedia.Wikipedia;
 import com.nialljude.dev.wikipedia.Pages;
 import lombok.NonNull;
@@ -13,6 +16,7 @@ public class JSONManager {
     private final String pageID = "21721040";
     private final int wordLength = 4;
     private final int wordsToDisplay = 5;
+    private static Logger logger = Logger.getLogger(Main.class.getName());
 
     /**
      * Read the JSON File stored at ./Wikiresponse.json.
@@ -28,25 +32,35 @@ public class JSONManager {
         Map<String, Integer> occurrences;
         Map<Integer, String> finalMap;
         String title;
+        logger.info("Instantiating a Wikipedia page POJO object");
         // Instantiate a Wikipedia page POJO object
         Wikipedia wikipediaPage = new Wikipedia();
+        logger.info("Using Jackson object mapper to instantiate");
         // Use Jackson object mapper to instantiate
         wikipediaPage = getWikipediaPageObjectFromJackson(wikipediaPage);
+        logger.info("Creating a map of the Pages and find info we want by pageID");
         // Create a map of the Pages and find info we want by pageID
         Map<String, Pages> pagesMap = wikipediaPage.getQuery().getPages();
         title = pagesMap.get(pageID).getTitle();
+        logger.info("Printing the page Title: "+title);
         // Print page Title for the user
         printTitle(title);
+        logger.info("PageID: "+pageID);
         // Get the raw content from Pages.[PAGEID].Extract
         String content = pagesMap.get(pageID).getExtract();
+        logger.info("Cleaning the raw content via regular expression...");
         // Clean content via regular expression
         String[] words = getStringsCleanedForComparison(content);
+        logger.info("Counting the occurrences of each word...");
         // Count the occurrences of each word
         occurrences = countWordOccurrences(words);
+        logger.info("Sorting the map by occurrences...");
         // Sort by occurrences
         sortedMap = sortOccurrences(occurrences);
+        logger.info("Checking and formatting words which match frequency...");
         // Check for words with matched frequency (and format if found)
         finalMap = checkForMatchedFrequency(sortedMap);
+        logger.info("Returning finalMap for display.\n"+finalMap.toString());
         return finalMap;
     }
 

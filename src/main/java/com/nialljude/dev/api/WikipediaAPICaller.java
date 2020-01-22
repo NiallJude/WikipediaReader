@@ -16,6 +16,7 @@ public class WikipediaAPICaller {
 
     private final String fileName = "WikiResponse.json";
     private final String pageID = "21721040";
+    private static Logger logger = Logger.getLogger(Main.class.getName());
 
     /**
      * Call the Wikipedia API - construct the URI in stages.
@@ -24,8 +25,6 @@ public class WikipediaAPICaller {
      * @author - Niall Jude Collins
      */
     public void runAPICall() {
-        ApplicationLogger applicationLogger = new ApplicationLogger();
-        Logger logger = applicationLogger.getLogger();
         // Initialise a closable HTTPClient and new StringBuffer
         CloseableHttpClient httpClient = HttpClients.createDefault();
         StringBuffer result;
@@ -62,9 +61,11 @@ public class WikipediaAPICaller {
      */
     private void closeResource(CloseableHttpClient httpClient) {
         try {
+            logger.info("Closing httpClient...");
             httpClient.close();
+            logger.info("httpClient closed...");
         } catch (IOException ex) {
-            System.out.println("Error closing httpClient");
+            logger.warning("IOException closing httpClient.");
             ex.printStackTrace();
         }
     }

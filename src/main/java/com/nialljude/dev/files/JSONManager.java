@@ -1,13 +1,11 @@
 package com.nialljude.dev.files;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.*;
 import java.util.*;
-
 import com.nialljude.dev.wikipedia.Wikipedia;
 import com.nialljude.dev.wikipedia.Pages;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 
 public class JSONManager {
 
@@ -71,7 +69,7 @@ public class JSONManager {
         System.out.println("\nTitle: " + title + "\n");
     }
 
-    @NotNull
+    @NonNull
     private String[] getStringsCleanedForComparison(String content) {
         // Regex to delete all punctuation, numbers and Upper Casing for comparisons
         return content.replaceAll("[^a-zA-Z ]", "").toLowerCase().split("\\s+");

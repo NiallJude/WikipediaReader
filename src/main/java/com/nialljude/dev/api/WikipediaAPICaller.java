@@ -1,5 +1,7 @@
 package com.nialljude.dev.api;
 
+import com.nialljude.dev.app.ApplicationLogger;
+import com.nialljude.dev.app.Main;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
@@ -8,6 +10,7 @@ import org.apache.http.impl.client.HttpClients;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.logging.Logger;
 
 public class WikipediaAPICaller {
 
@@ -21,9 +24,12 @@ public class WikipediaAPICaller {
      * @author - Niall Jude Collins
      */
     public void runAPICall() {
+        ApplicationLogger applicationLogger = new ApplicationLogger();
+        Logger logger = applicationLogger.getLogger();
         // Initialise a closable HTTPClient and new StringBuffer
         CloseableHttpClient httpClient = HttpClients.createDefault();
         StringBuffer result;
+        logger.info("Inititalised a HTTPClient and StringBuffer");
 
         // Variables to build Wiki query
         // To match 'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&pageids=21721040&explaintext&format=json'
@@ -32,6 +38,12 @@ public class WikipediaAPICaller {
         String path = "/w/api.php";
         String customQuery = "action=query&prop=extracts&pageids=[PLACEHOLDER]&explaintext&format=json";
         customQuery = customQuery.replace("[PLACEHOLDER]", pageID);
+
+        logger.info("Setting the following variables for URI assembly:\n" +
+                "Scheme: "+scheme
+                + "\nHost: "+host
+                + "\nPath: "+path
+                + "\nCustom Query: "+customQuery);
 
         // Get StringBuffer result from API Call
         result = getAPIResponse(httpClient, scheme, host, path, customQuery);

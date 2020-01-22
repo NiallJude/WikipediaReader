@@ -4,7 +4,6 @@ import com.nialljude.dev.api.WikipediaAPICaller;
 import org.apache.http.client.ClientProtocolException;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -68,6 +67,7 @@ public class WikipediaAPICallerTest extends Mockito {
         HttpGet httpGet = mock(HttpGet.class);
         HttpResponse httpResponse = mock(HttpResponse.class);
         StatusLine statusLine = mock(StatusLine.class);
+        boolean exists;
 
         //and:
         when(statusLine.getStatusCode()).thenReturn(200);
@@ -76,7 +76,7 @@ public class WikipediaAPICallerTest extends Mockito {
 
         wikipediaAPICaller.runAPICall();
         File testResponse = new File("WikiResponse.json");
-        boolean exists = testResponse.exists();
+        exists = testResponse.exists();
         assertTrue(exists);
     }
 }

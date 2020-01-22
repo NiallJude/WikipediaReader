@@ -7,116 +7,132 @@ import java.util.*;
 
 import com.nialljude.dev.wikipedia.Wikipedia;
 import com.nialljude.dev.wikipedia.Pages;
+import org.jetbrains.annotations.NotNull;
 
 public class JSONManager {
 
     private final String filepath = "Wikiresponse.json";
     private final String pageID = "21721040";
-    private final int wordLength = 5;
+    private final int wordLength = 4;
+    private final int wordsToDisplay = 5;
 
     /**
      * Read the JSON File stored at ./Wikiresponse.json.
+     * Format information in accordance with the requirements
+     * and return the results.
      *
+     * @return finalMap - The final Map of sorted values ready to be displayed.
      * @author Niall Jude Collins
      */
-    public void readJSONFile() {
+    public Map<Integer, String> getMapOfFormattedValuesFromJSON() {
+        // Vars
+        Map<String, Integer> sortedMap;
+        Map<String, Integer> occurrences;
+        Map<Integer, String> finalMap;
+        String title;
+        // Instantiate a Wikipedia page POJO object
+        Wikipedia wikipediaPage = new Wikipedia();
+        // Use Jackson object mapper to instantiate
+        wikipediaPage = getWikipediaPageObjectFromJackson(wikipediaPage);
+        // Create a map of the Pages and find info we want by pageID
+        Map<String, Pages> pagesMap = wikipediaPage.getQuery().getPages();
+        title = pagesMap.get(pageID).getTitle();
+        // Print page Title for the user
+        printTitle(title);
+        // Get the raw content from Pages.[PAGEID].Extract
+        String content = pagesMap.get(pageID).getExtract();
+        // Clean content via regular expression
+        String[] words = getStringsCleanedForComparison(content);
+        // Count the occurrences of each word
+        occurrences = countWordOccurrences(words);
+        // Sort by occurrences
+        sortedMap = sortOccurrences(occurrences);
+        // Check for words with matched frequency (and format if found)
+        finalMap = checkForMatchedFrequency(sortedMap);
+        return finalMap;
+    }
+
+    private Wikipedia getWikipediaPageObjectFromJackson(Wikipedia wikipediaPage) {
+        ObjectMapper mapper = new ObjectMapper();
+
         // Get JSON String from the file
         String json = getJSONString();
-        // Instantiate a page object
-        Wikipedia page = new Wikipedia();
-        // Now read the json String using the WikipediaApiHandler and Jackson
-        ObjectMapper mapper = new ObjectMapper();
-        // try/catch to secure IO Exception in Jackson
 
+        // try/catch to secure IO Exception risk in Jackson
         try {
-            page = mapper.readValue(json, Wikipedia.class);
+            wikipediaPage = mapper.readValue(json, Wikipedia.class);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
-        Map<String, Pages> pagesMap = page.getQuery().getPages();
-        System.out.println();
-        System.out.println("Title: " + pagesMap.get(pageID).getTitle() + "\n");
-        String content = pagesMap.get(pageID).getExtract();
-        String[] words = content.replaceAll("[^a-zA-Z ]", "").toLowerCase().split("\\s+");
-
-        countWords(words);
-
+        return wikipediaPage;
     }
 
-    public void countWords(String[] words) {
+    private void printTitle(String title){
+        System.out.println("\nTitle: " + title + "\n");
+    }
+
+    @NotNull
+    private String[] getStringsCleanedForComparison(String content) {
+        // Regex to delete all punctuation, numbers and Upper Casing for comparisons
+        return content.replaceAll("[^a-zA-Z ]", "").toLowerCase().split("\\s+");
+    }
+
+    public Map<String, Integer> countWordOccurrences(String[] words) {
         String[] splitWords = words;
 
         Map<String, Integer> occurrences = new HashMap<String, Integer>();
+
 
         for (String word : splitWords) {
             Integer oldCount = occurrences.get(word);
             if (oldCount == null) {
                 oldCount = 0;
             }
-            if (word.length() >= wordLength-1) {
+            if (word.length() >= wordLength) {
                 occurrences.put(word, oldCount + 1);
             }
         }
-
-        sortOccurrences(occurrences);
+        return occurrences;
     }
 
-    public void sortOccurrences(Map<String, Integer> occurrences) {
-        Object[] array = occurrences.entrySet().toArray();
-        Arrays.sort(array, new Comparator() {
-            public int compare(Object object1, Object object2) {
-                return ((Map.Entry<String, Integer>) object2).getValue()
-                        .compareTo(((Map.Entry<String, Integer>) object1).getValue());
-            }
-        });
+    private Map<String, Integer> sortOccurrences(Map<String, Integer> occurrences) {
 
-        checkForMatchedFrequency(array);
+        Map<String, Integer> sortedMap = new LinkedHashMap<>();
+        occurrences.entrySet().stream().sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .forEachOrdered(x -> sortedMap.put(x.getKey(), x.getValue()));
 
-    }
-
-    private void checkForMatchedFrequency(Object[] array) {
-        int previousValue = 0;
-        int valueToAdd;
-        int runs=0;
-        Boolean removalHappened = false;
-        String previousConcatenatedMatch;
-        String stringToAdd;
-        String concatenatedMatch;
-        ArrayList<String> finalList = new ArrayList<>();
-
-        for (Object entry : array) {
-            String currentEntry = ((Map.Entry<String, Integer>) entry).getKey();
-            if ( finalList.size() < 8) {
-                if (removalHappened) {
-                    runs--;
-                    removalHappened = false;
-                }
-                if (((Map.Entry<String, Integer>) entry).getValue() == previousValue) {
-                    previousConcatenatedMatch = finalList.get(runs-1);
-                    finalList.remove(runs-1);
-                    concatenatedMatch = previousConcatenatedMatch+", "+currentEntry;
-                    finalList.add(concatenatedMatch);
-                    runs++;
-                    removalHappened = true;
-                } else {
-                    valueToAdd = ((Map.Entry<String, Integer>) entry).getValue();
-                    stringToAdd = valueToAdd+" "+currentEntry;
-                    finalList.add(stringToAdd);
-                    runs++;
-                }
-            }
-            previousValue = ((Map.Entry<String, Integer>) entry).getValue();
-        }
-        System.out.println("Top 8 Words: \n");
-        for (String item : finalList){
-            System.out.println("- "+item.toString());
-        }
+        return sortedMap;
     }
 
     /**
-     * Read the final file String contents into a string.
-     * Return the results as a String.
+     * A method to find the most frequently occurring words
+     * with words of the same frequency appearing comma
+     * separated on the same line.
+     *
+     * @param sortedMap - The Tree
+     * @return finalMap - The final map, of the five most common words.
+     * @author Niall Jude Collins
+     */
+    private Map<Integer, String> checkForMatchedFrequency(Map<String, Integer> sortedMap) {
+        Map<Integer, String> finalMap = new TreeMap<>();
+
+        // Display sorted words with words of the same frequency
+        // appearing on the same line (comma separated)
+		sortedMap.forEach((key, value) -> {
+		if (finalMap.containsKey(value) && finalMap.size() <= wordsToDisplay) {
+			String concatenatedMatch = finalMap.get(value);
+			finalMap.put(value, concatenatedMatch += ", " + key);
+		} else if (finalMap.size() < wordsToDisplay) {
+			finalMap.put(value, key);
+		}
+		});
+
+		return finalMap;
+    }
+
+    /**
+     * Read the final file String contents into a string. Return the results as a
+     * String.
      *
      * @return StringBuilder to String.
      * @author Niall Jude Collins

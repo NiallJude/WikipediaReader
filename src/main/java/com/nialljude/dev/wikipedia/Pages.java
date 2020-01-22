@@ -2,7 +2,13 @@ package com.nialljude.dev.wikipedia;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Pages {
 
@@ -15,36 +21,4 @@ public class Pages {
     @JsonProperty("extract")
     private String extract;
 
-    public Pages(Integer pageID) {
-        this.pageID = pageID;
-    }
-
-    public Pages() {
-    }
-
-    public int getPageID() {
-        return pageID;
-    }
-
-    public void setPageID(int pageID) {
-        this.pageID = pageID;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getExtract() {
-        return extract;
-    }
-
-    public void setExtract(String extract) {
-        this.extract = extract;
-    }
-
-    @Override
-    public String toString() {
-        return "Title: " + title +
-                "\nContent: " + extract;
-    }
 }

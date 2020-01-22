@@ -10,7 +10,7 @@ public class ApplicationLogger {
     private static Logger logger = Logger.getLogger(ApplicationLogger.class.getName());
     static private FileHandler fileTxt;
     static private SimpleFormatter formatterTxt;
-    private final String loggerPath = "logging.txt";
+    private final String loggerPath = "WikipediaReaderLog.txt";
 
     /**
      * @return The Logger

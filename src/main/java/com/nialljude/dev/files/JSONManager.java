@@ -1,14 +1,17 @@
 package com.nialljude.dev.files;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.*;
-import java.util.*;
-import java.util.logging.Logger;
-
 import com.nialljude.dev.app.Main;
-import com.nialljude.dev.wikipedia.Wikipedia;
 import com.nialljude.dev.wikipedia.Pages;
+import com.nialljude.dev.wikipedia.Wikipedia;
 import lombok.NonNull;
+
+import java.io.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.logging.Logger;
 
 public class JSONManager {
 
@@ -32,6 +35,7 @@ public class JSONManager {
         Map<String, Integer> occurrences;
         Map<Integer, String> finalMap;
         String title;
+
         logger.info("Instantiating a Wikipedia page POJO object");
         // Instantiate a Wikipedia page POJO object
         Wikipedia wikipediaPage = new Wikipedia();
@@ -42,10 +46,10 @@ public class JSONManager {
         // Create a map of the Pages and find info we want by pageID
         Map<String, Pages> pagesMap = wikipediaPage.getQuery().getPages();
         title = pagesMap.get(pageID).getTitle();
-        logger.info("Printing the page Title: "+title);
+        logger.info("Printing the page Title: " + title);
         // Print page Title for the user
         printTitle(title);
-        logger.info("PageID: "+pageID);
+        logger.info("PageID: " + pageID);
         // Get the raw content from Pages.[PAGEID].Extract
         String content = pagesMap.get(pageID).getExtract();
         logger.info("Cleaning the raw content via regular expression...");
@@ -60,7 +64,7 @@ public class JSONManager {
         logger.info("Checking and formatting words which match frequency...");
         // Check for words with matched frequency (and format if found)
         finalMap = checkForMatchedFrequency(sortedMap);
-        logger.info("Returning finalMap for display.\n"+finalMap.toString());
+        logger.info("Returning finalMap for display.\n" + finalMap.toString());
         return finalMap;
     }
 
@@ -79,7 +83,7 @@ public class JSONManager {
         return wikipediaPage;
     }
 
-    private void printTitle(String title){
+    private void printTitle(String title) {
         System.out.println("\nTitle: " + title + "\n");
     }
 
@@ -130,16 +134,16 @@ public class JSONManager {
 
         // Display sorted words with words of the same frequency
         // appearing on the same line (comma separated)
-		sortedMap.forEach((key, value) -> {
-		if (finalMap.containsKey(value) && finalMap.size() <= wordsToDisplay) {
-			String concatenatedMatch = finalMap.get(value);
-			finalMap.put(value, concatenatedMatch += ", " + key);
-		} else if (finalMap.size() < wordsToDisplay) {
-			finalMap.put(value, key);
-		}
-		});
+        sortedMap.forEach((key, value) -> {
+            if (finalMap.containsKey(value) && finalMap.size() <= wordsToDisplay) {
+                String concatenatedMatch = finalMap.get(value);
+                finalMap.put(value, concatenatedMatch += ", " + key);
+            } else if (finalMap.size() < wordsToDisplay) {
+                finalMap.put(value, key);
+            }
+        });
 
-		return finalMap;
+        return finalMap;
     }
 
     /**

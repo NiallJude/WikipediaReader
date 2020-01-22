@@ -13,7 +13,6 @@ public class ApplicationLogger {
     private final String loggerPath = "logging.txt";
 
     /**
-     *
      * @return The Logger
      */
     public void setup() {
@@ -41,7 +40,7 @@ public class ApplicationLogger {
         formatterTxt = new SimpleFormatter();
         fileTxt.setFormatter(formatterTxt);
         logger.addHandler(fileTxt);
-        logger.info("Logger set up at "+loggerPath);
+        logger.info("Logger set up at " + loggerPath);
     }
 
     public Logger getLogger() {

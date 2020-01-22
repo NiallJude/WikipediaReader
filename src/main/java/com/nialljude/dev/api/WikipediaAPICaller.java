@@ -1,12 +1,12 @@
 package com.nialljude.dev.api;
 
-import com.nialljude.dev.app.ApplicationLogger;
 import com.nialljude.dev.app.Main;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -39,10 +39,10 @@ public class WikipediaAPICaller {
         customQuery = customQuery.replace("[PLACEHOLDER]", pageID);
 
         logger.info("Setting the following variables for URI assembly:\n" +
-                "Scheme: "+scheme
-                + "\nHost: "+host
-                + "\nPath: "+path
-                + "\nCustom Query: "+customQuery);
+                "Scheme: " + scheme
+                + "\nHost: " + host
+                + "\nPath: " + path
+                + "\nCustom Query: " + customQuery);
 
         // Get StringBuffer result from API Call
         result = getAPIResponse(httpClient, scheme, host, path, customQuery);
@@ -135,7 +135,6 @@ public class WikipediaAPICaller {
 
     /**
      * Process the response and return.
-     *
      *
      * @param response - The HTTP Response from the API.
      * @throws IOException

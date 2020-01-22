@@ -2,7 +2,6 @@ package wikipedia;
 
 import com.nialljude.dev.wikipedia.Pages;
 import com.nialljude.dev.wikipedia.Query;
-
 import org.junit.Before;
 import org.junit.Test;
 

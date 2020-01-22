@@ -4,10 +4,9 @@ package com.nialljude.dev.app;
 import com.nialljude.dev.api.WikipediaAPICaller;
 import com.nialljude.dev.files.JSONManager;
 
-import java.io.IOException;
-import java.util.logging.*;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Logger;
 
 public class Main {
 
@@ -51,6 +50,7 @@ public class Main {
         logger.info("Displaying the formatted information...");
         // Display information
         displayInformation(finalMap);
+        logger.info("Run completed. Exiting.");
     }
 
     /**

@@ -93,5 +93,8 @@ In future, more complex acceptance and load testing would have occurred. Alongsi
 * Springboot.The project, were it to be deployed, would have benefited from being architected within a modern "quick and easy" framework
 and this could easily port into a frontend service like Angular for WebApp deployment.
 
+* Database. The project currently runs, but only outputs information to the console. In a Production scenario,
+we would prefer the project to persist data gathered in some way, such as Amazon DynamoDB or similar.
+
 * Documentation and Logging. The documentation and logging and quite ad-hoc. During future cycles, we will
 focus on bringing this to enterprise standards and including UML diagrams and Lucid charts (or similar).

@@ -3,8 +3,10 @@ package com.nialljude.dev.app;
 
 import com.nialljude.dev.api.APICaller;
 import com.nialljude.dev.files.JSONManager;
+import com.nialljude.dev.files.PropertyManager;
 
 import java.util.Map;
+import java.util.Properties;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
@@ -16,6 +18,7 @@ public class Main {
     // Logging variables.
     private static Logger logger = Logger.getLogger(ApplicationLogger.class.getName());
     private static ApplicationLogger applicationLogger;
+    private Properties properties;
 
     /**
      * A main method
@@ -38,6 +41,8 @@ public class Main {
      * @author Niall Jude Collins
      */
     private void start() {
+        PropertyManager propertyManager = new PropertyManager();
+        properties = propertyManager.getProperties();
         logger.info("Starting project run...");
         // Call Wikipedia API
         logger.info("Calling the Wikipedia API");
@@ -45,7 +50,7 @@ public class Main {
 
         logger.info("Getting the formatted page information from JSON");
         // Read JSON file and calculate words by requirements
-        finalMap = getPageInformationFromJSON();
+        finalMap = getPageInformationFromJSON(properties.getProperty("page.filePath"));
 
         logger.info("Displaying the formatted information...");
         // Display information
@@ -71,11 +76,12 @@ public class Main {
      * A method to get and return the processed
      * data from JSON in the format specified
      * @return finalMap - The final map, ready for display
+     * @param filePath
      */
-    private Map<Integer, String> getPageInformationFromJSON() {
+    private Map<Integer, String> getPageInformationFromJSON(String filePath) {
         // Read JSON and get 10 projects in a list
         JSONManager JSONManager = new JSONManager();
-        finalMap = JSONManager.getMapOfFormattedValuesFromJSON();
+        finalMap = JSONManager.getMapOfFormattedValuesFromJSON(filePath);
         return finalMap;
     }
 

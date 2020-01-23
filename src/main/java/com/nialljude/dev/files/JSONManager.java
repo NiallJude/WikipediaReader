@@ -23,8 +23,9 @@ public class JSONManager {
      *
      * @return finalMap - The final Map of sorted values ready to be displayed.
      * @author Niall Jude Collins
+     * @param filePath
      */
-    public Map<Integer, String> getMapOfFormattedValuesFromJSON() {
+    public Map<Integer, String> getMapOfFormattedValuesFromJSON(String filePath) {
         // Vars
         Map<String, Integer> sortedMap;
         Map<String, Integer> occurrences;
@@ -39,7 +40,7 @@ public class JSONManager {
         Wikipedia wikipediaPage = new Wikipedia();
         logger.info("Using Jackson object mapper to instantiate");
         // Use Jackson object mapper to instantiate
-        wikipediaPage = getWikipediaPageObjectFromJackson(wikipediaPage, properties.getProperty("page.filePath"));
+        wikipediaPage = getWikipediaPageObjectFromJackson(wikipediaPage, filePath);
         logger.info("Creating a map of the Pages and find info we want by pageID");
         // Create a map of the Pages and find info we want by pageID
         Map<String, Pages> pagesMap = wikipediaPage.getQuery().getPages();

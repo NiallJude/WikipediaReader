@@ -7,18 +7,14 @@ import com.nialljude.dev.wikipedia.Wikipedia;
 import lombok.NonNull;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class JSONManager {
-
-    private final String filepath = "WikiResponse.json";
-    private final String pageID = "21721040";
+    
     private final int wordLength = 4;
     private final int wordsToDisplay = 5;
+    // Instantiate logger
     private static Logger logger = Logger.getLogger(Main.class.getName());
 
     /**
@@ -35,23 +31,25 @@ public class JSONManager {
         Map<String, Integer> occurrences;
         Map<Integer, String> finalMap;
         String title;
+        PropertyManager propertyManager = new PropertyManager();
+        Properties properties = propertyManager.getProperties();
 
         logger.info("Instantiating a Wikipedia page POJO object");
         // Instantiate a Wikipedia page POJO object
         Wikipedia wikipediaPage = new Wikipedia();
         logger.info("Using Jackson object mapper to instantiate");
         // Use Jackson object mapper to instantiate
-        wikipediaPage = getWikipediaPageObjectFromJackson(wikipediaPage);
+        wikipediaPage = getWikipediaPageObjectFromJackson(wikipediaPage, properties.getProperty("page.filePath"));
         logger.info("Creating a map of the Pages and find info we want by pageID");
         // Create a map of the Pages and find info we want by pageID
         Map<String, Pages> pagesMap = wikipediaPage.getQuery().getPages();
-        title = pagesMap.get(pageID).getTitle();
+        title = pagesMap.get(properties.getProperty("page.pageID")).getTitle();
         logger.info("Printing the page Title: " + title);
         // Print page Title for the user
         printTitle(title);
-        logger.info("PageID: " + pageID);
+        logger.info("PageID: " + properties.getProperty("page.pageID"));
         // Get the raw content from Pages.[PAGEID].Extract
-        String content = pagesMap.get(pageID).getExtract();
+        String content = pagesMap.get(properties.getProperty("page.pageID")).getExtract();
         logger.info("Cleaning the raw content via regular expression...");
         // Clean content via regular expression
         String[] words = getStringsCleanedForComparison(content);
@@ -68,11 +66,11 @@ public class JSONManager {
         return finalMap;
     }
 
-    private Wikipedia getWikipediaPageObjectFromJackson(Wikipedia wikipediaPage) {
+    private Wikipedia getWikipediaPageObjectFromJackson(Wikipedia wikipediaPage, String filepath) {
         ObjectMapper mapper = new ObjectMapper();
 
         // Get JSON String from the file
-        String json = getJSONString();
+        String json = getJSONString(filepath);
 
         // try/catch to secure IO Exception risk in Jackson
         try {
@@ -153,7 +151,7 @@ public class JSONManager {
      * @return StringBuilder to String.
      * @author Niall Jude Collins
      */
-    private String getJSONString() {
+    private String getJSONString(String filepath) {
         StringBuilder sb = new StringBuilder();
         try {
             InputStream is = new FileInputStream(filepath);

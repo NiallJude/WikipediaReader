@@ -1,6 +1,7 @@
 package com.nialljude.dev.api;
 
 import com.nialljude.dev.app.Main;
+import com.nialljude.dev.files.PropertyManager;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
@@ -28,7 +29,8 @@ public class WikipediaAPICaller {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         StringBuffer result;
         logger.info("Inititalised a HTTPClient and StringBuffer");
-        Properties properties = getProperties();
+        PropertyManager propertyManager = new PropertyManager();
+        Properties properties = propertyManager.getProperties();
 
         // Variables to build Wiki query
         // To match 'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&pageids=21721040&explaintext&format=json'
@@ -52,20 +54,6 @@ public class WikipediaAPICaller {
         writeResponse(result, properties.getProperty("page.filePath"));
         // Close Client Resource
         closeResource(httpClient);
-    }
-
-    private Properties getProperties() {
-        Properties properties = new Properties();
-
-        try (InputStream input = new FileInputStream("src/main/resources/config.properties")) {
-
-            // load a properties file
-            properties.load(input);
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return properties;
     }
 
     /**

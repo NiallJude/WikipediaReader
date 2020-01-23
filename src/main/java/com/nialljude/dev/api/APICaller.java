@@ -14,7 +14,7 @@ import java.net.URISyntaxException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-public class WikipediaAPICaller {
+public class APICaller {
 
     private static Logger logger = Logger.getLogger(Main.class.getName());
 

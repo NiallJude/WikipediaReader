@@ -11,9 +11,8 @@ import java.util.*;
 import java.util.logging.Logger;
 
 public class JSONManager {
-    
+
     private final int wordLength = 4;
-    private final int wordsToDisplay = 5;
     // Instantiate logger
     private static Logger logger = Logger.getLogger(Main.class.getName());
 
@@ -31,6 +30,7 @@ public class JSONManager {
         Map<String, Integer> occurrences;
         Map<Integer, String> finalMap;
         String title;
+        logger.info("Fetching properties...");
         PropertyManager propertyManager = new PropertyManager();
         Properties properties = propertyManager.getProperties();
 
@@ -61,7 +61,8 @@ public class JSONManager {
         sortedMap = sortOccurrences(occurrences);
         logger.info("Checking and formatting words which match frequency...");
         // Check for words with matched frequency (and format if found)
-        finalMap = checkForMatchedFrequency(sortedMap);
+        int wordsToDisplay = Integer.parseInt(properties.getProperty("page.wordsToDisplay"));
+        finalMap = checkForMatchedFrequency(sortedMap, wordsToDisplay);
         logger.info("Returning finalMap for display.\n" + finalMap.toString());
         return finalMap;
     }
@@ -96,7 +97,6 @@ public class JSONManager {
 
         Map<String, Integer> occurrences = new HashMap<String, Integer>();
 
-
         for (String word : splitWords) {
             Integer oldCount = occurrences.get(word);
             if (oldCount == null) {
@@ -127,7 +127,7 @@ public class JSONManager {
      * @return finalMap - The final map, of the five most common words.
      * @author Niall Jude Collins
      */
-    private Map<Integer, String> checkForMatchedFrequency(Map<String, Integer> sortedMap) {
+    private Map<Integer, String> checkForMatchedFrequency(Map<String, Integer> sortedMap, int wordsToDisplay) {
         Map<Integer, String> finalMap = new TreeMap<>();
 
         // Display sorted words with words of the same frequency

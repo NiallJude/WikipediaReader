@@ -1,4 +1,0 @@
-Unstaged changes after reset:
-M	.gitignore
-M	exampleOutput/ConsoleOutput-example.txt
-D	exampleOutput/exampleConsoleOutput.txt

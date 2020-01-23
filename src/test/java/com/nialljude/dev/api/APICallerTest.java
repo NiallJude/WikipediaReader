@@ -1,6 +1,6 @@
 package api;
 
-import com.nialljude.dev.api.WikipediaAPICaller;
+import com.nialljude.dev.api.APICaller;
 import org.apache.http.client.ClientProtocolException;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,9 +18,9 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.mockito.Mockito;
 
-public class WikipediaAPICallerTest extends Mockito {
+public class APICallerTest extends Mockito {
 
-    private WikipediaAPICaller wikipediaAPICaller;
+    private APICaller APICaller;
     private String host;
     private String scheme;
     private String path;
@@ -28,7 +28,7 @@ public class WikipediaAPICallerTest extends Mockito {
 
     @Before
     public void setUp(){
-        wikipediaAPICaller = new WikipediaAPICaller();
+        APICaller = new APICaller();
         host = "test.com";
         scheme = "https";
         path = "/test";
@@ -40,7 +40,7 @@ public class WikipediaAPICallerTest extends Mockito {
     public void testThatGetURIReturnsANonNullObject(){
         URI actual = null;
         try {
-            actual = wikipediaAPICaller.getUri(scheme, host, path, customQuery);
+            actual = APICaller.getUri(scheme, host, path, customQuery);
         } catch (URISyntaxException ex) {
             ex.printStackTrace();
         }
@@ -52,7 +52,7 @@ public class WikipediaAPICallerTest extends Mockito {
         URI actual = null;
         String expected = "https://test.com/test?test=test";
         try {
-            actual = wikipediaAPICaller.getUri(scheme, host, path, customQuery);
+            actual = APICaller.getUri(scheme, host, path, customQuery);
         } catch (URISyntaxException ex) {
             ex.printStackTrace();
         }
@@ -74,7 +74,7 @@ public class WikipediaAPICallerTest extends Mockito {
         when(httpResponse.getStatusLine()).thenReturn(statusLine);
         when(httpClient.execute(httpGet)).thenReturn(httpResponse);
 
-        wikipediaAPICaller.runAPICall();
+        APICaller.runAPICall();
         File testResponse = new File("WikiResponse.json");
         exists = testResponse.exists();
         assertTrue(exists);

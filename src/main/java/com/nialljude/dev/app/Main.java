@@ -1,7 +1,7 @@
 package com.nialljude.dev.app;
 
 
-import com.nialljude.dev.api.WikipediaAPICaller;
+import com.nialljude.dev.api.APICaller;
 import com.nialljude.dev.files.JSONManager;
 
 import java.util.Map;
@@ -63,7 +63,7 @@ public class Main {
      */
     private void runWikipediaAPICall() {
         // Call Wikipedia API
-        WikipediaAPICaller api = new WikipediaAPICaller();
+        APICaller api = new APICaller();
         api.runAPICall();
     }
 
@@ -88,7 +88,7 @@ public class Main {
      * @param finalMap
      */
     private void displayInformation(Map<Integer, String> finalMap) {
-        System.out.println("Top 5 Words: \n");
+        System.out.println("Top "+finalMap.size()+" Words: \n");
         for (Integer key : ((TreeMap<Integer, String>) finalMap).descendingKeySet()) {
             logger.info("Displaying the following key to the user: "+finalMap.get(key));
             System.out.println("- " + key + " " + finalMap.get(key));

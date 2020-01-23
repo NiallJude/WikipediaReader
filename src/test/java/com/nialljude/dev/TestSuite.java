@@ -1,4 +1,4 @@
-import api.WikipediaAPICallerTest;
+import api.APICallerTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import wikipedia.PagesTest;
@@ -11,7 +11,7 @@ import wikipedia.WikipediaTest;
         PagesTest.class,
         QueryTest.class,
         WikipediaTest.class,
-        WikipediaAPICallerTest.class
+        APICallerTest.class
 })
 
 public class TestSuite {

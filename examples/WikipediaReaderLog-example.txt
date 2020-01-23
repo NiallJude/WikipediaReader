@@ -1,0 +1,57 @@
+Jan 23, 2020 10:04:25 AM com.nialljude.dev.app.ApplicationLogger setup
+INFO: Logger set up at WikipediaReaderLog.txt
+Jan 23, 2020 10:04:25 AM com.nialljude.dev.app.Main start
+INFO: Starting project run...
+Jan 23, 2020 10:04:25 AM com.nialljude.dev.app.Main start
+INFO: Calling the Wikipedia API
+Jan 23, 2020 10:04:26 AM com.nialljude.dev.api.APICaller runAPICall
+INFO: Inititalised a HTTPClient and StringBuffer
+Jan 23, 2020 10:04:26 AM com.nialljude.dev.api.APICaller runAPICall
+INFO: Setting the following variables for URI assembly:
+Scheme: https
+Host: en.wikipedia.org
+Path: /w/api.php
+Custom Query: action=query&prop=extracts&pageids=21721040&explaintext&format=json
+Jan 23, 2020 10:04:26 AM com.nialljude.dev.api.APICaller closeResource
+INFO: Closing httpClient...
+Jan 23, 2020 10:04:26 AM com.nialljude.dev.api.APICaller closeResource
+INFO: httpClient closed...
+Jan 23, 2020 10:04:26 AM com.nialljude.dev.app.Main start
+INFO: Getting the formatted page information from JSON
+Jan 23, 2020 10:04:26 AM com.nialljude.dev.files.JSONManager getMapOfFormattedValuesFromJSON
+INFO: Fetching properties...
+Jan 23, 2020 10:04:26 AM com.nialljude.dev.files.JSONManager getMapOfFormattedValuesFromJSON
+INFO: Instantiating a Wikipedia page POJO object
+Jan 23, 2020 10:04:26 AM com.nialljude.dev.files.JSONManager getMapOfFormattedValuesFromJSON
+INFO: Using Jackson object mapper to instantiate
+Jan 23, 2020 10:04:27 AM com.nialljude.dev.files.JSONManager getMapOfFormattedValuesFromJSON
+INFO: Creating a map of the Pages and find info we want by pageID
+Jan 23, 2020 10:04:27 AM com.nialljude.dev.files.JSONManager getMapOfFormattedValuesFromJSON
+INFO: Printing the page Title: Stack Overflow
+Jan 23, 2020 10:04:27 AM com.nialljude.dev.files.JSONManager getMapOfFormattedValuesFromJSON
+INFO: PageID: 21721040
+Jan 23, 2020 10:04:27 AM com.nialljude.dev.files.JSONManager getMapOfFormattedValuesFromJSON
+INFO: Cleaning the raw content via regular expression...
+Jan 23, 2020 10:04:27 AM com.nialljude.dev.files.JSONManager getMapOfFormattedValuesFromJSON
+INFO: Counting the occurrences of each word...
+Jan 23, 2020 10:04:27 AM com.nialljude.dev.files.JSONManager getMapOfFormattedValuesFromJSON
+INFO: Sorting the map by occurrences...
+Jan 23, 2020 10:04:27 AM com.nialljude.dev.files.JSONManager getMapOfFormattedValuesFromJSON
+INFO: Checking and formatting words which match frequency...
+Jan 23, 2020 10:04:27 AM com.nialljude.dev.files.JSONManager getMapOfFormattedValuesFromJSON
+INFO: Returning finalMap for display.
+{12=that, 15=overflow, 16=users, 20=stack, 21=questions}
+Jan 23, 2020 10:04:27 AM com.nialljude.dev.app.Main start
+INFO: Displaying the formatted information...
+Jan 23, 2020 10:04:27 AM com.nialljude.dev.app.Main displayInformation
+INFO: Displaying the following key to the user: questions
+Jan 23, 2020 10:04:27 AM com.nialljude.dev.app.Main displayInformation
+INFO: Displaying the following key to the user: stack
+Jan 23, 2020 10:04:27 AM com.nialljude.dev.app.Main displayInformation
+INFO: Displaying the following key to the user: users
+Jan 23, 2020 10:04:27 AM com.nialljude.dev.app.Main displayInformation
+INFO: Displaying the following key to the user: overflow
+Jan 23, 2020 10:04:27 AM com.nialljude.dev.app.Main displayInformation
+INFO: Displaying the following key to the user: that
+Jan 23, 2020 10:04:27 AM com.nialljude.dev.app.Main start
+INFO: Run completed. Exiting.

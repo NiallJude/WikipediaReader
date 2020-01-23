@@ -10,12 +10,11 @@ import org.apache.http.impl.client.HttpClients;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Properties;
 import java.util.logging.Logger;
 
 public class WikipediaAPICaller {
 
-    private final String fileName = "WikiResponse.json";
-    private final String pageID = "21721040";
     private static Logger logger = Logger.getLogger(Main.class.getName());
 
     /**
@@ -29,14 +28,16 @@ public class WikipediaAPICaller {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         StringBuffer result;
         logger.info("Inititalised a HTTPClient and StringBuffer");
+        Properties properties = getProperties();
 
         // Variables to build Wiki query
         // To match 'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&pageids=21721040&explaintext&format=json'
-        String scheme = "https";
-        String host = "en.wikipedia.org";
-        String path = "/w/api.php";
-        String customQuery = "action=query&prop=extracts&pageids=[PLACEHOLDER]&explaintext&format=json";
-        customQuery = customQuery.replace("[PLACEHOLDER]", pageID);
+        String scheme = properties.getProperty("url.scheme");
+        String host = properties.getProperty("url.host");
+        String path = properties.getProperty("url.path");
+        String customQuery = properties.getProperty("url.customQuery");
+        String pageId = properties.getProperty("page.pageID");
+        customQuery = customQuery.replace("[PLACEHOLDER]", pageId);
 
         logger.info("Setting the following variables for URI assembly:\n" +
                 "Scheme: " + scheme
@@ -48,9 +49,23 @@ public class WikipediaAPICaller {
         result = getAPIResponse(httpClient, scheme, host, path, customQuery);
 
         // Write response to a file in JSON
-        writeResponse(result, fileName);
+        writeResponse(result, properties.getProperty("page.filePath"));
         // Close Client Resource
         closeResource(httpClient);
+    }
+
+    private Properties getProperties() {
+        Properties properties = new Properties();
+
+        try (InputStream input = new FileInputStream("src/main/resources/config.properties")) {
+
+            // load a properties file
+            properties.load(input);
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return properties;
     }
 
     /**

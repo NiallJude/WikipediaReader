@@ -2,4 +2,6 @@ Wikiresponse.json
 .idea/
 target/
 wikireader.iml
-Logging.txt
+WikipediaReaderLog.txt
+exampleOutput/*
+./exampleOutput/*
